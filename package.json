@@ -10,10 +10,8 @@
   "license": "ISC",
   "dependencies": {
     "express": "latest",
-    "express-session": "latest",
-    "cookie-parser": "latest",
     "body-parser": "latest",
     "ejs": "latest",
-    "cheerio": "latest"
+    "follow-redirects": "latest"
   }
 }

@@ -4,6 +4,8 @@ var bodyParser = require('body-parser');
 var url = require('url');
 var querystring = require('querystring');
 var http = require('http');
+var https = require('https');
+
 var app = express();
 //var cheerio = require('cheerio');
 
@@ -26,10 +28,10 @@ app.use('/get-content', function(req, res){
     var proto = null;
     switch(destination.protocol){
       case "http:":
-        proto = require('http');
+        proto = require('follow-redirects').http;
         break;
       case "https:":
-        proto = require('https');
+        proto = require('follow-redirects').https;
         break;
       default:
         proto = null;
