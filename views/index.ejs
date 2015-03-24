@@ -72,6 +72,10 @@ $(function() {
         data: {url: $('#url').val(), method: $('#method').val()},
         contentType: "application/json",
       }).done(function(data){
+        if(!data){
+          editor.html("Failed to retrieve data.");
+          return;
+        }
         content = data;
         editor.html(data);
 

@@ -7,7 +7,7 @@ var http = require('http');
 var app = express();
 //var cheerio = require('cheerio');
 
-app.set('http_port', process.env.HTTP_PORT || 3000);
+app.set('http_port', process.env.HTTP_PORT || 3005);
 app.set('domain', process.env.HOSTNAME || 'lvh.me');
 
 app.use(bodyParser.urlencoded({ extended: true }));
