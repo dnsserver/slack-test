@@ -1,0 +1,19 @@
+{
+  "name": "oidc",
+  "version": "1.0.0",
+  "description": "",
+  "main": "oidc_connect.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "express": "latest",
+    "express-session": "latest",
+    "cookie-parser": "latest",
+    "body-parser": "latest",
+    "ejs": "latest",
+    "cheerio": "latest"
+  }
+}

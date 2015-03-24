@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+  <title>Editor</title>
+  <style type="text/css" media="screen">
+    #editor {
+        margin: 0;
+        height: 400px;
+    }
+
+    markIt {
+        background-color: rgb(50, 237, 123);
+        color: black;
+    }
+  </style>
+  <script src="//code.jquery.com/jquery-2.1.3.min.js"></script>
+  <!-- Latest compiled and minified CSS -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+  <!-- Optional theme -->
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap-theme.min.css">
+  <!-- Latest compiled and minified JavaScript -->
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/js/bootstrap.min.js"></script>
+  </head>
+<body>
+<div class="header">
+  <form id="url-entry">
+    Enter the URL:
+    <input type="text" id="url" size="100" value="https://slack-files.com/T024BE7LD-F037NBW8Y-347a47e877"/>
+    <select type="select" id="method">
+      <option value="get">GET</option>
+      <option value="post">POST</option>
+    </select>
+    <button type="button" class="btn btn-lg btn-default" id="search">Search</button>
+  </form>
+</div>
+<div class="col-sm-6">
+  Source:
+  <div id="source">
+    <pre id="editor"></pre>
+  </div>
+</div>
+<div class="col-sm-6">
+  Summary:
+  <div id="summary">
+  </div>
+</div>
+
+
+<script>
+
+var content = null;
+function showTag(name){
+  unmark();
+  var re = new RegExp("&lt;\s*("+name+")\s*(.*?)&gt;","gim"); ///&lt;\s*(\w+)\s*(.*?)&gt;/gim;
+  var str = $('#editor').html();
+  var new_str = str.replace(re, "&lt;<markIt>$1</markIt> $2&gt;");
+  $('#editor').html(new_str);
+
+}
+
+function unmark(){
+  $('#editor').html(content);
+}
+
+$(function() {
+    var editor = $('#editor');
+    $('#search').click(function(){
+      $.ajax({
+        url: "/get-content",
+        data: {url: $('#url').val(), method: $('#method').val()},
+        contentType: "application/json",
+      }).done(function(data){
+        content = data;
+        editor.html(data);
+
+        //parsing html
+        var elements = data.match(/&lt;\s*(\w+)\s*.*?&gt;/gi);
+        var t = {};
+        elements.forEach(function(el){
+          var name = (/&lt;\s*(\w+)\s*.*?&gt;/gi).exec(el);
+          if(name){
+            if(t[name[1]]){
+              t[name[1]] ++;
+            }else{
+              t[name[1]] = 1;
+            }
+          }
+        })
+
+        // holds the summary display
+        var s = '<table class="table table-striped"><thead><tr><th>Tag Name</th><th>Count</th></tr></thead><tbody>'
+        $.each(t,function(n, c){
+          s += "<tr><td><a href='javascript:void(0)' onclick='showTag(\""+n+"\")'>"+n+"</a><td><td>"+c+"</td></tr>";
+        });
+        s += "</tbody></table>";
+
+        $('#summary').html(s);
+      }).fail(function(e){
+        console.log('in fail');
+        content = null;
+        editor.html("Failed to retrieve data.");
+      })
+    });
+
+
+  });
+</script>
+
+</body>
+</html>
