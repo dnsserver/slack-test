@@ -82,7 +82,7 @@ $(function() {
         //parsing html
         var elements = data.match(/&lt;\s*(\w+)\s*.*?&gt;/gi);
         var t = {};
-        if(elements && elements.length<1){
+        if(!elements || elements.length<1){
           return;
         }
         elements.forEach(function(el){
