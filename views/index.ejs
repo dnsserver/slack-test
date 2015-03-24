@@ -82,6 +82,9 @@ $(function() {
         //parsing html
         var elements = data.match(/&lt;\s*(\w+)\s*.*?&gt;/gi);
         var t = {};
+        if(elements.length<1){
+          return;
+        }
         elements.forEach(function(el){
           var name = (/&lt;\s*(\w+)\s*.*?&gt;/gi).exec(el);
           if(name){
